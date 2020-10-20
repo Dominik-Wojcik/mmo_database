@@ -1,0 +1,356 @@
+-- fill data
+create or replace function fill_data_achievements()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..1000 loop
+        INSERT INTO achievements VALUES (i, 'Achievement' || cast(i AS text), 'Description' || cast(i AS text));
+        end loop;
+end;
+$$;
+
+SELECT fill_data_achievements();
+
+INSERT INTO types VALUES (1, 'light');
+INSERT INTO types VALUES (2, 'medium');
+INSERT INTO types VALUES (3, 'heavy');
+
+create or replace function fill_data_armors()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..1000 loop
+        INSERT INTO armors VALUES (i, i % 3 + 1, i % 20 + 10, i % 20 + 10, i % 20 + 10, i % 20 + 10);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_armors();
+
+create or replace function fill_data_users()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..30000 loop
+        INSERT INTO users VALUES (i, 'Login' || cast(i AS text), 'Password' || cast(i AS text), 'Name' || cast(i AS text), to_date('20/10/2020', 'DD/MM/YYYY'));
+        end loop;
+end;
+$$;
+
+SELECT fill_data_users();
+
+create or replace function fill_data_users_achievements()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..60000 loop
+        INSERT INTO users_achievements VALUES (i % 30000 + 1, i % 1000 + 1, to_date('20/10/2020', 'DD/MM/YYYY'));
+        end loop;
+end;
+$$;
+
+SELECT fill_data_users_achievements();
+
+create or replace function fill_data_servers()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..20 loop
+        INSERT INTO servers VALUES (i, 'ServerName' || cast(i AS text), 2000, to_date('20/10/2020', 'DD/MM/YYYY'));
+        end loop;
+end;
+$$;
+
+SELECT fill_data_servers();
+
+create or replace function fill_data_users_servers()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..80000 loop
+        INSERT INTO users_servers VALUES (i % 30000 + 1, i % 20 + 1);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_users_servers();
+
+create or replace function fill_data_mobs()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..300 loop
+        INSERT INTO mobs VALUES (i, 'MobName' || cast(i AS text), i % 60 + 1, i, i, false, i % 3 + 1);
+        end loop;
+end;
+$$;
+
+INSERT INTO mobs_types VALUES (1, 'normal');
+INSERT INTO mobs_types VALUES (2, 'elite');
+INSERT INTO mobs_types VALUES (3, 'boss');
+
+SELECT fill_data_mobs();
+
+create or replace function fill_data_instances()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..60 loop
+        INSERT INTO instances VALUES (i, 'InstanceName' || cast(i AS text), 'InstanceDescription' || cast(i AS text), (i % 2 + 1) * 5, (i % 12 + 1) * 5);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_instances();
+
+create or replace function fill_data_classes()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..8 loop
+        INSERT INTO classes VALUES (i, 'ClassName' || cast(i AS text));
+        end loop;
+end;
+$$;
+
+SELECT fill_data_classes();
+
+create or replace function fill_data_races()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..8 loop
+        INSERT INTO races VALUES (i,'RaceName' || cast(i AS text));
+        end loop;
+end;
+$$;
+
+SELECT fill_data_races();
+
+create or replace function fill_data_characters()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..120000 loop
+        INSERT INTO characters VALUES (i, 'Nickname' || cast(i AS text), 20, to_date(cast((i % 30 + 1) AS text) ||'/10/2020', 'DD/MM/YYYY'), i % 8 + 1, i % 8 + 1, to_date(cast((i % 30 + 1) AS text) ||'/10/2020', 'DD/MM/YYYY'), i % 20 + 1);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_characters();
+
+create or replace function fill_data_characters_instances()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..300000 loop
+        INSERT INTO characters_instances VALUES (i % 100000 + 1, i % 60 + 1, to_date(cast((i % 30 + 1) AS text) ||'/10/2020', 'DD/MM/YYYY'));
+        end loop;
+end;
+$$;
+
+SELECT fill_data_characters_instances();
+
+create or replace function fill_data_characters_instances()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..300000 loop
+        INSERT INTO characters_instances VALUES (i % 100000 + 1, i % 60 + 1, to_date(cast((i % 30 + 1) AS text) ||'/10/2020', 'DD/MM/YYYY'));
+        end loop;
+end;
+$$;
+
+SELECT fill_data_characters_instances();
+
+INSERT INTO rarity VALUES (1, 'normal');
+INSERT INTO rarity VALUES (2, 'rare');
+INSERT INTO rarity VALUES (3, 'epic');
+INSERT INTO rarity VALUES (4, 'legendary');
+
+INSERT INTO item_type VALUES (1, 'armor');
+INSERT INTO item_type VALUES (2, 'weapon');
+INSERT INTO item_type VALUES (3, 'jewelery');
+INSERT INTO item_type VALUES (4, 'other_items');
+
+create or replace function fill_data_jewelery()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..300 loop
+        INSERT INTO jewelery VALUES (i, i % 60 + 1, i % 60 + 1, i % 60 + 1, i % 60 + 1, (i % 60) * 100);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_jewelery();
+
+create or replace function fill_data_other_items()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..300 loop
+        INSERT INTO other_items VALUES (i, true);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_other_items();
+
+INSERT INTO types VALUES (4, 'onehand');
+INSERT INTO types VALUES (5, 'twohand');
+INSERT INTO types VALUES (6, 'bow');
+INSERT INTO types VALUES (7, 'crossbow');
+INSERT INTO types VALUES (8, 'shield');
+INSERT INTO types VALUES (9, 'polearm');
+INSERT INTO types VALUES (10, 'wand');
+INSERT INTO types VALUES (11, 'offhand');
+
+create or replace function fill_data_weapons()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..300 loop
+        INSERT INTO weapons VALUES (i, i % 8 + 4, i % 60, i % 60, i % 60, i % 60, i % 100);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_weapons();
+
+create or replace function fill_data_items()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..1200 loop
+        INSERT INTO items VALUES (i, 'ItemName' || cast(i AS text), 'ItemDescription' || cast(i AS text), i % 100 + 100, i % 60 + 1, i % 4 + 1, i % 300 + 1, i % 4 + 1 );
+        end loop;
+end;
+$$;
+
+SELECT fill_data_items();
+
+create or replace function fill_data_inventory()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..400000 loop
+        INSERT INTO inventory VALUES (i % 120000 + 1, i % 1200 + 1);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_inventory();
+
+create or replace function fill_data_inventory()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..400000 loop
+        INSERT INTO inventory VALUES (i % 120000 + 1, i % 1200 + 1);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_inventory();
+
+create or replace function fill_data_transactions()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..360000 loop
+        INSERT INTO transactions VALUES (i,  i % 120000 + 1, i % 60000 + 6000, to_date(cast((i % 30 + 1) AS text) ||'/10/2020', 'DD/MM/YYYY'), i % 1200 + 1, i % 4 + 1);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_transactions();
+
+INSERT INTO types VALUES (12, 'physical');
+INSERT INTO types VALUES (13, 'fire');
+INSERT INTO types VALUES (14, 'water');
+INSERT INTO types VALUES (15, 'earth');
+INSERT INTO types VALUES (16, 'electric');
+
+create or replace function fill_data_skills()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..300 loop
+        INSERT INTO skills VALUES (i, i % 5 + 12, 'Skillname' || cast(i AS text), false);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_skills();
+
+create or replace function fill_data_race_skills()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..300 loop
+        INSERT INTO race_skills VALUES (i % 8 + 1, i);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_race_skills();
+
+create or replace function fill_data_classes_types()
+returns void
+language plpgsql
+as
+$$
+begin
+    for i in 1..32 loop
+        INSERT INTO classes_types VALUES (i % 8 + 1, i % 16 + 1);
+        end loop;
+end;
+$$;
+
+SELECT fill_data_classes_types();
+
