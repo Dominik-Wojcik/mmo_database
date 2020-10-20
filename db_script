@@ -274,7 +274,7 @@ create table characters
             primary key,
     nickname        text    not null,
     experience      integer not null,
-    last_level_date integer not null,
+    last_level_date date not null,
     class_id        integer not null
         constraint characters_classes_id_fk
             references classes,
