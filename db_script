@@ -1,0 +1,379 @@
+ 
+create table users
+(
+    id        serial not null
+        constraint users_pk
+            primary key,
+    login     text   not null,
+    password  text   not null,
+    name      text   not null,
+    join_date date   not null
+);
+
+alter table users
+    owner to postgres;
+
+create unique index users_login_uindex
+    on users (login);
+
+create table servers
+(
+    id            serial  not null
+        constraint servers_pk
+            primary key,
+    name          text    not null,
+    max_players   integer not null,
+    creation_date date
+);
+
+alter table servers
+    owner to postgres;
+
+create table users_servers
+(
+    user_id   integer not null
+        constraint users_servers_users_id_fk
+            references users,
+    server_id integer not null
+        constraint users_servers_servers_id_fk
+            references servers
+);
+
+alter table users_servers
+    owner to postgres;
+
+create table mobs_types
+(
+    id   serial not null
+        constraint mobs_types_pk
+            primary key,
+    name text   not null
+);
+
+alter table mobs_types
+    owner to postgres;
+
+create table mobs
+(
+    id          serial  not null
+        constraint mobs_pk
+            primary key,
+    name        text    not null,
+    level       integer not null,
+    health      integer not null,
+    armor       integer not null,
+    is_passive  boolean,
+    mob_type_id integer not null
+        constraint mobs_mobs_types_id_fk
+            references mobs_types
+);
+
+alter table mobs
+    owner to postgres;
+
+create table achievements
+(
+    id          serial not null
+        constraint achievements_pk
+            primary key,
+    name        text   not null,
+    description text   not null
+);
+
+alter table achievements
+    owner to postgres;
+
+create table users_achievements
+(
+    user_id         integer not null
+        constraint users_achievements_users_id_fk
+            references users,
+    achievement_id  integer not null
+        constraint users_achievements_achievements_id_fk
+            references achievements,
+    completion_date date    not null
+);
+
+alter table users_achievements
+    owner to postgres;
+
+create table instances
+(
+    id          serial  not null
+        constraint instances_pk
+            primary key,
+    name        text    not null,
+    description text    not null,
+    max_players integer not null,
+    min_lvl     integer not null
+);
+
+alter table instances
+    owner to postgres;
+
+create table rarity
+(
+    id   serial not null
+        constraint rarity_pk
+            primary key,
+    name text   not null
+);
+
+alter table rarity
+    owner to postgres;
+
+create table item_type
+(
+    id         serial not null
+        constraint item_type_pk
+            primary key,
+    table_name text   not null
+);
+
+alter table item_type
+    owner to postgres;
+
+create table jewelery
+(
+    id           serial  not null
+        constraint jewelery_pk
+            primary key,
+    armor_points integer not null,
+    strength     integer not null,
+    agility      integer not null,
+    intelect     integer not null,
+    price        integer not null
+);
+
+alter table jewelery
+    owner to postgres;
+
+create table other_items
+(
+    id            serial  not null
+        constraint other_items_pk
+            primary key,
+    is_quest_item boolean not null
+);
+
+alter table other_items
+    owner to postgres;
+
+create table types
+(
+    id   serial not null
+        constraint types_pk
+            primary key,
+    name text   not null
+);
+
+alter table types
+    owner to postgres;
+
+create table weapons
+(
+    id             serial  not null
+        constraint weapons_pk
+            primary key,
+    weapon_type_id integer not null
+        constraint weapons_types_id_fk
+            references types,
+    armor_points   integer not null,
+    strength       integer not null,
+    agility        integer not null,
+    intellect      integer not null,
+    block_chance   integer not null
+);
+
+alter table weapons
+    owner to postgres;
+
+create table armors
+(
+    id            serial  not null
+        constraint armors_pk
+            primary key,
+    armor_type_id integer not null
+        constraint armors_types_id_fk
+            references types,
+    armor_points  integer not null,
+    strength      integer not null,
+    agility       integer not null,
+    intellect     integer not null
+);
+
+alter table armors
+    owner to postgres;
+
+create table items
+(
+    id           serial  not null
+        constraint items_pk
+            primary key,
+    name         text    not null,
+    description  text,
+    sell_price   integer not null,
+    required_lvl integer not null,
+    item_type_id integer not null
+        constraint items_item_type_id_fk
+            references item_type,
+    item_id      integer not null
+        constraint items_armors_id_fk
+            references armors
+        constraint items_jewelery_id_fk
+            references jewelery
+        constraint items_other_items_id_fk
+            references other_items
+        constraint items_weapons_id_fk
+            references weapons,
+    rarity_id    integer not null
+        constraint items_rarity_id_fk
+            references rarity
+);
+
+alter table items
+    owner to postgres;
+
+create table classes_types
+(
+    classes_id integer not null,
+    types_id   integer not null
+        constraint classes_types_types_id_fk
+            references types
+);
+
+alter table classes_types
+    owner to postgres;
+
+create table classes
+(
+    id   serial not null
+        constraint classes_pk
+            primary key,
+    name text   not null
+);
+
+alter table classes
+    owner to postgres;
+
+create table races
+(
+    id   serial not null
+        constraint races_pk
+            primary key,
+    name text   not null
+);
+
+alter table races
+    owner to postgres;
+
+create table characters
+(
+    id              serial  not null
+        constraint characters_pk
+            primary key,
+    nickname        text    not null,
+    experience      integer not null,
+    last_level_date integer not null,
+    class_id        integer not null
+        constraint characters_classes_id_fk
+            references classes,
+    race_id         integer not null
+        constraint characters_races_id_fk
+            references races,
+    creation_date   date    not null,
+    server_id       integer not null
+        constraint characters_servers_id_fk
+            references servers
+);
+
+alter table characters
+    owner to postgres;
+
+create table characters_instances
+(
+    character_id    integer not null
+        constraint characters_instances_characters_id_fk
+            references characters,
+    instance_id     integer not null
+        constraint characters_instances_instances_id_fk
+            references instances,
+    completion_date date    not null
+);
+
+alter table characters_instances
+    owner to postgres;
+
+create table transactions
+(
+    id               serial  not null
+        constraint transactions_pk
+            primary key,
+    seller_id        integer not null
+        constraint seller_fk
+            references characters,
+    buyer_id         integer not null
+        constraint buyer_fk
+            references characters,
+    transaction_date date    not null,
+    item_id          integer not null
+        constraint transactions_items_id_fk
+            references items,
+    item_amount      integer not null
+);
+
+alter table transactions
+    owner to postgres;
+
+create table inventory
+(
+    character_id integer not null
+        constraint inventory_characters_id_fk
+            references characters,
+    item_id      integer not null
+        constraint inventory_items_id_fk
+            references items
+);
+
+alter table inventory
+    owner to postgres;
+
+create table skills
+(
+    id            serial  not null
+        constraint skills_pk
+            primary key,
+    skill_type_id integer not null
+        constraint skills_types_id_fk
+            references types,
+    name          text    not null,
+    is_passive    boolean not null
+);
+
+alter table skills
+    owner to postgres;
+
+create table race_skills
+(
+    race_id  integer not null
+        constraint race_skills_races_id_fk
+            references races,
+    skill_id integer not null
+        constraint race_skills_skills_id_fk
+            references skills
+);
+
+alter table race_skills
+    owner to postgres;
+
+create table table_name
+(
+    column_1 integer not null
+        constraint table_name_pk
+            primary key,
+    column_2 text
+);
+
+alter table table_name
+    owner to postgres;
+
