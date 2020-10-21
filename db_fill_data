@@ -38,7 +38,7 @@ as
 $$
 begin
     for i in 1..30000 loop
-        INSERT INTO users VALUES (i, 'Login' || cast(i AS text), 'Password' || cast(i AS text), 'Name' || cast(i AS text), to_date('20/10/2020', 'DD/MM/YYYY'));
+        INSERT INTO users VALUES (i, MD5(random()::text), MD5(random()::text), 'Name' || cast(i AS text), to_date('20/10/2020', 'DD/MM/YYYY'));
         end loop;
 end;
 $$;
