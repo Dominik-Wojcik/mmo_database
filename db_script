@@ -381,6 +381,13 @@ create table nickname_changes
 	change_date date not null
 );
 
+CREATE TABLE login_changes
+(
+    previous_login text not null,
+    new_login      text not null,
+    change_date date not null
+);
+
 alter table table_name
     owner to postgres;
 
