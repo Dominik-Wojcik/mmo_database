@@ -1,0 +1,18 @@
+CREATE OR REPLACE FUNCTION log_change_nickname()
+  RETURNS TRIGGER
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	IF NEW.nickname <> OLD.nickname THEN
+		 INSERT INTO nickname_changes(previous_nickname, new_nickname, change_date)
+		 VALUES(OLD.nickname, NEW.nickname, now());
+	END IF;
+	RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER log_change_nickname_trigger
+    AFTER UPDATE
+    ON characters FOR EACH ROW
+EXECUTE PROCEDURE log_change_nickname();
