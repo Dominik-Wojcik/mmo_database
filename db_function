@@ -1,0 +1,26 @@
+ 
+CREATE OR REPLACE FUNCTION get_item_subtype(item_type text, item_id integer)
+    RETURNS text
+    LANGUAGE plpgsql
+    as
+    $$
+    declare
+        result text;
+    begin
+        case item_type
+            when 'armor' then
+            result = (SELECT ts.name
+                FROM types ts
+                JOIN armors ars on ts.id = ars.armor_type_id
+                WHERE ars.id = item_id);
+            when 'weapon' then
+            result = (SELECT ts.name
+                FROM weapons wpns
+                JOIN types ts on wpns.weapon_type_id = ts.id
+                WHERE wpns.id = item_id);
+            when 'jewelery' then result = 'jewelery';
+            when 'other_items' then result =  'other_items';
+        END case;
+        return result;
+    end;
+    $$;
