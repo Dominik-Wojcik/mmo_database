@@ -16,3 +16,22 @@ CREATE TRIGGER log_change_nickname_trigger
     AFTER UPDATE
     ON characters FOR EACH ROW
 EXECUTE PROCEDURE log_change_nickname();
+
+
+CREATE OR REPLACE FUNCTION log_login_change()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS
+$$
+    BEGIN
+    IF NEW.login <> OLD.login THEN
+        INSERT INTO login_changes(previous_login, new_login, change_date)
+        VALUES (OLD.login, NEW.login, now());
+    END IF;
+    RETURN new;
+    END
+$$;
+
+CREATE TRIGGER log_change_login_trigger
+    AFTER UPDATE ON users FOR EACH ROW
+    EXECUTE PROCEDURE log_login_change();
