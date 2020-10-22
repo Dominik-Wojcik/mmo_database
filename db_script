@@ -374,6 +374,13 @@ create table table_name
     column_2 text
 );
 
+create table nickname_changes
+(
+	previous_nickname text not null,
+	new_nickname text not null,
+	change_date date not null
+);
+
 alter table table_name
     owner to postgres;
 
