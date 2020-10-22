@@ -1,0 +1,14 @@
+CREATE VIEW class_id_4_on_server_4 AS
+    SELECT ch.id, ch.nickname, ch.experience, cl.name, rc.name AS race_name, ch.creation_date, sv.name AS server_name
+    FROM characters ch
+        JOIN classes cl on ch.class_id = cl.id
+        JOIN races rc on ch.race_id = rc.id
+        JOIN servers sv on ch.server_id = sv.id
+    WHERE ch.class_id = 4 AND sv.id = 4;
+
+CREATE OR REPLACE VIEW users_completed_achievements AS
+    SELECT achievements.name, COUNT(*) users_completed, (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM users)) AS users_completed_percentage
+    FROM users_achievements
+        JOIN achievements ON users_achievements.achievement_id = achievements.id
+    GROUP BY achievement_id, achievements.name
+    HAVING COUNT(*) > 0;

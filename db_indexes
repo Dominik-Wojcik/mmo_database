@@ -1,0 +1,4 @@
+CREATE INDEX user_index ON users(login);
+CREATE INDEX achievements_index ON achievements (id, name);
+CREATE INDEX characters_index ON characters(id, nickname);
+CREATE INDEX item_index ON items(id, name);
