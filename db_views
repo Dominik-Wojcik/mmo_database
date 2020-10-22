@@ -12,3 +12,11 @@ CREATE OR REPLACE VIEW users_completed_achievements AS
         JOIN achievements ON users_achievements.achievement_id = achievements.id
     GROUP BY achievement_id, achievements.name
     HAVING COUNT(*) > 0;
+
+CREATE OR REPLACE VIEW legendary_items AS
+    SELECT i.id, i.name, i.sell_price, i.required_lvl, it.table_name AS item_type, get_item_subtype(it.table_name, i.item_id) AS item_subtype, r.name AS rarity
+    FROM items i
+        JOIN item_type it on i.item_type_id = it.id
+        JOIN rarity r on i.rarity_id = r.id
+    WHERE r.name = 'legendary'
+    ORDER BY sell_price;
